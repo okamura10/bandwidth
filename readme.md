@@ -1,0 +1,21 @@
+# 帯域幅測定
+- 実行結果確認のためN=2^30、ite=5
+- **async.cu** cudaMemcpyAsync(/copyカーネル) + Eventによる時間計測
+  - MemcpyA H2D
+  - MemcpyA D2H
+  - MemcpyA D2D (not P2P・ホスト経由)
+  - MemcpyA D2D P2P     (NVlink)
+  - copyカーネル P2P    (NVlink)
+- **sync** cudaMemcpy + chronoによる時間計測
+  - Memcpy H2D
+  - Memcpy D2H
+  - Memcpy D2D (not P2P・ホスト経由)
+  - Memcpy D2D P2P      (NVlink)
+  - copyカーネル P2P    (NVlink)
+- **stream** STREAM_benchmarkを参考にした(STREAM_benchmarkではない)
+  - 0で実行
+    - copy    (1 to 0)
+    - scale   (1 to 0)
+    - sum     (1,1 to 0)    (GB/sは実際はR/Wが他の1.5倍)
+    - triad   (1,1 to 0)    (GB/sは実際はR/Wが他の1.5倍)
+
